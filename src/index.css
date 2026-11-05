@@ -1,0 +1,254 @@
+@import "tailwindcss";
+
+/* ───────────────────────── iMate design tokens ───────────────────────── */
+@theme {
+  --color-navy: #101d32;
+  --color-navy-deep: #0a1324;
+  --color-navy-soft: #1a2b48;
+  --color-orange: #e87532;
+  --color-orange-dark: #cf6123;
+  --color-orange-tint: #fdf0e6;
+  --color-grey: #f3f5f7;
+  --color-grey-deep: #e9edf1;
+  --color-charcoal: #202936;
+  --color-muted: #5b6676;
+  --color-line: #e1e6ec;
+  --color-line-dark: rgba(255, 255, 255, 0.12);
+
+  --font-display: "Manrope", "Inter", system-ui, sans-serif;
+  --font-body: "Inter", system-ui, sans-serif;
+
+  --radius-card: 1rem;
+  --shadow-card: 0 1px 2px rgba(16, 29, 50, 0.04), 0 12px 32px -12px rgba(16, 29, 50, 0.18);
+  --shadow-float: 0 24px 60px -20px rgba(16, 29, 50, 0.35);
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@layer base {
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+}
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
+
+body {
+  @apply bg-white text-charcoal font-body antialiased;
+  overflow-x: hidden;
+  font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+}
+
+h1,
+h2,
+h3,
+h4 {
+  @apply font-display text-navy;
+  text-wrap: balance;
+}
+p {
+  text-wrap: pretty;
+}
+img {
+  @apply block max-w-full;
+}
+::selection {
+  background: #e87532;
+  color: white;
+}
+:focus-visible {
+  outline: 2px solid #e87532;
+  outline-offset: 3px;
+}
+}
+
+@layer components {
+  .container-x {
+    @apply mx-auto w-full max-w-[1360px] px-5 sm:px-8 lg:px-12;
+  }
+  .section-pad {
+    @apply py-20 sm:py-24 lg:py-32;
+  }
+
+  /* eyebrow label like "01 — Capabilities" */
+  .eyebrow {
+    @apply inline-flex items-center gap-3 text-[11px] font-semibold uppercase tracking-[0.18em] text-orange;
+  }
+  .eyebrow::before {
+    content: "";
+    @apply inline-block h-px w-8 bg-orange;
+  }
+  .eyebrow.on-dark {
+    @apply text-orange;
+  }
+
+  /* display type */
+  .display-xl {
+    @apply font-display font-extrabold leading-[0.98] tracking-[-0.03em] text-white;
+    font-size: clamp(2.6rem, 6.4vw, 5.4rem);
+  }
+  .display-lg {
+    @apply font-display font-bold leading-[1.04] tracking-[-0.025em];
+    font-size: clamp(2rem, 4vw, 3.4rem);
+  }
+  .display-md {
+    @apply font-display font-bold leading-[1.1] tracking-[-0.02em];
+    font-size: clamp(1.5rem, 2.6vw, 2.2rem);
+  }
+  .display-sm {
+    @apply font-display font-bold leading-[1.2] tracking-[-0.01em];
+    font-size: clamp(1.15rem, 1.6vw, 1.4rem);
+  }
+  .lead {
+    @apply text-base sm:text-lg leading-relaxed text-muted;
+  }
+
+  /* cards and images */
+  .card {
+    @apply rounded-2xl bg-white border border-line;
+    box-shadow: var(--shadow-card);
+  }
+  .img-frame {
+    @apply relative overflow-hidden bg-grey;
+  }
+  .img-frame img {
+    @apply h-full w-full object-cover transition-transform duration-[1200ms];
+    transition-timing-function: var(--ease-out-expo);
+  }
+  .group:hover .img-frame img,
+  .img-frame:hover img {
+    transform: scale(1.06);
+  }
+  .img-overlay {
+    @apply absolute inset-0 bg-gradient-to-t from-navy/85 via-navy/25 to-transparent;
+  }
+
+  /* glass nav */
+  .nav-solid {
+    @apply bg-white/90 backdrop-blur-xl border-b border-line;
+    box-shadow: 0 8px 30px -18px rgba(16, 29, 50, 0.3);
+  }
+
+  /* links with sliding underline */
+  .link-line {
+    @apply relative inline-flex items-center gap-2 font-semibold text-navy;
+  }
+  .link-line::after {
+    content: "";
+    @apply absolute left-0 -bottom-0.5 h-px w-full bg-orange origin-left transition-transform duration-300;
+    transform: scaleX(0);
+  }
+  .link-line:hover::after,
+  .group:hover .link-line::after {
+    transform: scaleX(1);
+  }
+
+  /* spec table */
+  .spec {
+    @apply grid grid-cols-[minmax(0,1fr)_minmax(0,1.3fr)] text-sm;
+  }
+  .spec > dt {
+    @apply py-2.5 pr-4 text-muted border-b border-line;
+  }
+  .spec > dd {
+    @apply py-2.5 font-medium text-charcoal border-b border-line;
+  }
+
+  /* form */
+  .field {
+    @apply w-full rounded-xl border border-line bg-white px-4 py-3 text-sm text-charcoal outline-none transition;
+  }
+  .field:focus {
+    @apply border-orange ring-4 ring-orange/15;
+  }
+  .field[aria-invalid="true"] {
+    @apply border-red-500 ring-4 ring-red-500/10;
+  }
+  .field-label {
+    @apply mb-1.5 block text-xs font-semibold uppercase tracking-wider text-muted;
+  }
+
+  /* placeholder badge: content awaiting client approval */
+  .tbc {
+    @apply inline-flex items-center gap-1.5 rounded-md border border-dashed border-orange/60 bg-orange-tint px-2 py-0.5 text-[11px] font-semibold uppercase tracking-wider text-orange-dark;
+  }
+
+  /* prose for blog */
+  .prose-imate p {
+    @apply mb-5 text-[17px] leading-[1.75] text-charcoal;
+  }
+  .prose-imate h2 {
+    @apply mt-10 mb-4 font-display font-bold leading-[1.2] tracking-[-0.01em];
+    font-size: clamp(1.15rem, 1.6vw, 1.4rem);
+  }
+  .prose-imate ul {
+    @apply mb-5 list-disc pl-6 space-y-2 text-charcoal;
+  }
+}
+
+/* horizontal rail */
+.rail {
+  @apply flex gap-5 overflow-x-auto snap-x snap-mandatory pb-2;
+  scrollbar-width: none;
+  cursor: grab;
+}
+.rail::-webkit-scrollbar {
+  display: none;
+}
+.rail.dragging {
+  cursor: grabbing;
+  scroll-snap-type: none;
+}
+.rail > * {
+  @apply snap-start shrink-0;
+}
+
+/* logo marquee */
+@keyframes marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+.marquee-track {
+  display: flex;
+  width: max-content;
+  animation: marquee 42s linear infinite;
+}
+.marquee:hover .marquee-track {
+  animation-play-state: paused;
+}
+@media (prefers-reduced-motion: reduce) {
+  .marquee-track {
+    animation: none;
+  }
+}
+
+/* hero ken burns */
+@keyframes kenburns {
+  from {
+    transform: scale(1.02);
+  }
+  to {
+    transform: scale(1.12);
+  }
+}
+.kenburns {
+  animation: kenburns 22s ease-out forwards;
+}
+@media (prefers-reduced-motion: reduce) {
+  .kenburns {
+    animation: none;
+  }
+}
+
+/* fine grid texture for dark sections */
+.grid-texture {
+  background-image: linear-gradient(rgba(255, 255, 255, 0.045) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.045) 1px, transparent 1px);
+  background-size: 48px 48px;
+}
